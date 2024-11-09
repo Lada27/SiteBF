@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подарок для моего любимого</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f0f8ff; }
+        #content { display: none; }
+        #passwordSection { margin-top: 100px; }
+    </style>
+    <script>
+        function checkPassword() {
+            const password = document.getElementById("password").value;
+            if (password === "твойдлинныйпароль") { // Здесь укажи пароль
+                document.getElementById("passwordSection").style.display = "none";
+                document.getElementById("content").style.display = "block";
+            } else {
+                alert("Неверный пароль. Попробуйте еще раз!");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="passwordSection">
+        <h2>Введите пароль</h2>
+        <input type="password" id="password" placeholder="Пароль">
+        <button onclick="checkPassword()">Войти</button>
+    </div>
+    
+    <div id="content">
+        <header>
+            <h1>Подарок для моего любимого</h1>
+        </header>
+        <section>
+            <h2>Фотографии</h2>
+            <p>Здесь будут наши фотографии...</p>
+        </section>
+        <section>
+            <h2>Пожелание</h2>
+            <p>Моё личное пожелание для тебя...</p>
+        </section>
+        <section>
+            <h2>Игры</h2>
+            <p>Небольшая игра для развлечения!</p>
+        </section>
+    </div>
+</body>
+</html>

@@ -24,8 +24,8 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-image: url('img/fon.jpg'); /* Укажите ваш путь */
-            background-size: cover; /* Чтобы не растягивалось */
+            background-image: url('img/fon.jpg');
+            background-size: cover; 
             background-repeat: no-repeat; /* Избежать повторения */
             background-position: center; /* Центрирование изображения */
             transition: background-color 0.5s ease-in-out, background-image 0.5s ease-in-out;
@@ -37,16 +37,15 @@
             top: 20px;
             left: 20px;
             padding: 10px 20px;
-            background-color: transparent; /* Оранжевый цвет */
+            background-color: transparent; 
             color: rgb(0, 0, 0);
             border-radius: 5px;
             cursor: pointer;
             transition: transform 0.2s;
         }
 
-        /* Эффект при наведении на кнопку */
         button#back-button:hover {
-            background-color: #ffb521; /* Темнее при наведении */
+            background-color: #ffb521; 
             transform: scale(1.1);
         }
 
@@ -104,7 +103,7 @@
 
         for (let i = 0; i < ducks; i++) {
             const duck = document.createElement("img");
-            duck.src = "img/duck.png"; // Замените на путь к изображению уточки
+            duck.src = "img/duck.png"; 
             duck.alt = "Уточка";
             ducksContainer.appendChild(duck);
         }

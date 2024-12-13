@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Финал</title>
+    <style>
+        #confetti {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: url('img/fon.jpg'); /* Укажите ваш путь */
+            background-size: cover; /* Чтобы не растягивалось */
+            background-repeat: no-repeat; /* Избежать повторения */
+            background-position: center; /* Центрирование изображения */
+            transition: background-color 0.5s ease-in-out, background-image 0.5s ease-in-out;
+        }
+
+        /* Позиционирование кнопки "На главную" */
+        button#back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: transparent; /* Оранжевый цвет */
+            color: rgb(0, 0, 0);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        /* Эффект при наведении на кнопку */
+        button#back-button:hover {
+            background-color: #ffb521; /* Темнее при наведении */
+            transform: scale(1.1);
+        }
+
+        #ducks img {
+            width: 50px;
+            margin: 5px;
+        }
+
+        h1, h3 {
+            margin: 10px 0;
+            color: black;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #ffb521;
+            border: 2px solid #000000; /* Толщина, стиль и цвет рамки */
+            color: rgb(0, 0, 0);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #dc8323;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <button id="back-button" onclick="back()">На главную</button> <!-- Кнопка на главную -->
+
+    <script>
+        function back() {
+            window.location.href = 'main.html'; /* Переход на другую страницу */
+        }
+    </script>
+    
+    <h1>Ты собрал уточек!</h1>
+    <div id="ducks"></div>
+    <h3>И финальный вопрос...</h3>
+
+    <h3>Ты меня любишь?</h3>
+    <button id="yes-button">Да</button>
+    <button id="no-button">Нет</button>
+    <canvas id="confetti"></canvas>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const ducks = params.get("ducks");
+        const ducksContainer = document.getElementById("ducks");
+
+        for (let i = 0; i < ducks; i++) {
+            const duck = document.createElement("img");
+            duck.src = "img/duck.png"; // Замените на путь к изображению уточки
+            duck.alt = "Уточка";
+            ducksContainer.appendChild(duck);
+        }
+
+        const yesButton = document.getElementById("yes-button");
+        const noButton = document.getElementById("no-button");
+
+        yesButton.onclick = () => {
+            // Убираем фон и запускаем конфетти
+            document.body.style.backgroundImage = "none";
+            document.body.style.backgroundColor = "#ffb521";
+            startConfetti();
+        };
+
+        noButton.onclick = () => {
+            const randomX = Math.random() * window.innerWidth - 50;
+            const randomY = Math.random() * window.innerHeight - 50;
+            noButton.style.position = "absolute";
+            noButton.style.left = `${Math.max(0, randomX)}px`;
+            noButton.style.top = `${Math.max(0, randomY)}px`;
+        };
+
+        function startConfetti() {
+            const canvas = document.getElementById("confetti");
+            const ctx = canvas.getContext("2d");
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const confettiPieces = Array.from({ length: 100 }).map(() => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                dx: Math.random() * 2 - 1,
+                dy: Math.random() * 2 + 2,
+                size: Math.random() * 5 + 5,
+                color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+            }));
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                confettiPieces.forEach((piece) => {
+                    ctx.beginPath();
+                    ctx.arc(piece.x, piece.y, piece.size, 0, Math.PI * 2);
+                    ctx.fillStyle = piece.color;
+                    ctx.fill();
+                    piece.x += piece.dx;
+                    piece.y += piece.dy;
+
+                    if (piece.y > canvas.height) piece.y = -piece.size;
+                });
+
+                requestAnimationFrame(draw);
+            }
+
+            draw();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Найди уточек!</title>
+    <style>
+       body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #ffeaea;
+    background-image: url("img/back.png");
+    background-size: cover; /* Для того чтобы изображение заполняло весь экран */
+    background-position: center; /* Центрируем изображение */
+    background-repeat: no-repeat; /* Избегаем повторения изображения */
+    position: relative;
+}
+        .confetti {
+            position: fixed; /* Фиксируем положение относительно окна браузера */
+            top: 0; /* Начинаем с верхней части экрана */
+            width: 10px;
+            height: 10px;
+            background: #C9707E;
+            animation: fall 2s linear infinite;
+            z-index: 1000; /* Устанавливаем высокий z-index, чтобы конфетти были поверх всего */
+        }
+        @keyframes fall {
+            0% { transform: translateY(-50px); opacity: 1; }
+            100% { transform: translateY(600px); opacity: 0; }
+        }
+        #content {
+            margin: 20px auto;
+        }
+        .duck {
+            font-size: 40px;
+            cursor: pointer;
+        }
+        .found {
+            color: green;
+        }
+        #photo-container {
+            display: flex;
+            justify-content:center;
+            align-items:flex-end; 
+        }
+        #photo-container img {
+            max-width: 50%;
+            height: auto; /* Сохраняем пропорции */
+            display: inline-block; /* Убираем "всплывающее" поведение изображений */
+            margin: 0 -10px;
+        }
+
+
+        /* Кнопки */
+        .buttons {
+            position: fixed; /* Фиксируем кнопки относительно окна */
+            bottom: 20%; /* Располагаем кнопки чуть ниже центра экрана */
+            left: 50%; /* Центрируем по горизонтали */
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px; /* Расстояние между кнопками */
+            background-color: transparent;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #C9707E;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .buttons button {
+            background-color: #C9707E;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .buttons button:hover {
+            background-color: #ffffff;
+            color: #C9707E;        }
+        html, body {
+    margin: 0; /* Убираем отступы */
+    padding: 0; /* Убираем внутренние отступы */
+    overflow-x: hidden; /* Запрещаем горизонтальную прокрутку */
+    width: 100%; /* Устанавливаем ширину для предотвращения переполнения */
+    height: 100%; /* Задаем полную высоту страницы */
+    box-sizing: border-box; /* Корректный расчет размеров */
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit; /* Расширяем правило для всех элементов */
+}
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #ffeaea;
+    background-image: url("img/back.png");
+    background-size: cover; /* Масштабируем фон для покрытия всего экрана */
+    background-position: center; /* Центрируем фон */
+    background-repeat: no-repeat; /* Запрещаем повторение фона */
+    position: relative;
+}
+
+    </style>
+<style>
+      .garland-container {
+            position: absolute;
+            top: -60px; /* Расположение гирлянд выше */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+        }
+
+    .garland {
+       position: relative; 
+       background: url(img/girl.png);
+       background-color: transparent;
+       background-size: 100%;
+       width: 500px;
+       height: 250px;
+    }
+     
+    .garland img {
+       position: absolute;
+       left: 0;
+       top: 0;
+       width: 100%;
+       height: 100%;
+       transition: opacity 0.5s;
+    }
+    </style>
+</head>
+<body onload="startConfetti()">
+     <!-- Контейнер для всех гирлянд -->
+     <div class="garland-container">
+        <!-- Первая гирлянда -->
+        <div class="garland" id="garland1">
+            <img src="img/red_light.png" />
+            <img src="img/yello_light.png" />
+            <img src="img/blue_light.png" />
+        </div>
+        <!-- Вторая гирлянда -->
+        <div class="garland" id="garland2">
+            <img src="img/red_light.png" />
+            <img src="img/yello_light.png" />
+            <img src="img/blue_light.png" />
+        </div>
+        <!-- Третья гирлянда -->
+        <div class="garland" id="garland3">
+            <img src="img/red_light.png" />
+            <img src="img/yello_light.png" />
+            <img src="img/blue_light.png" />
+        </div>
+    </div>
+
+    <script>
+        // Функция для анимации гирлянды
+        function animateGarland(garlandId) {
+            setInterval(() => {
+                const images = document.querySelectorAll(`#${garlandId} img`);
+                images.forEach(img => {
+                    img.style.opacity = Math.random() > 0.3 ? 1 : 0;
+                });
+            }, 600);
+        }
+
+        // Запуск анимации для каждой гирлянды
+        animateGarland('garland1');
+        animateGarland('garland2');
+        animateGarland('garland3');
+    </script>
+  
+    <!-- <h1>Найди 10 уточек!</h1> -->
+    <!-- <div id="content">
+        <span class="duck" onclick="foundDuck(this)">🦆</span>
+        <span class="duck" onclick="foundDuck(this)">🦆</span>
+        <span class="duck" onclick="foundDuck(this)">🦆</span>
+        <span class="duck" onclick="foundDuck(this)">🦆</span>
+        <span class="duck" onclick="foundDuck(this)">🦆</span>
+        <span class="duck" onclick="foundDuck(this)">🦆</span>
+        <span class="duck" onclick="foundDuck(this)">🦆</span>
+        <span class="duck" onclick="foundDuck(this)">🦆</span>
+        <span class="duck" onclick="foundDuck(this)">🦆</span>
+        <span class="duck" onclick="foundDuck(this)">🦆</span>
+    </div> -->
+    <div id="photo-container">
+        <img src="img/me.png" alt="Your photo">
+        <img src="img/eldr.png" alt="Partner photo">
+    </div>
+
+    <!-- Кнопки -->
+    <div class="buttons">
+        <button id="quiz-button" onclick="goToQuiz()">Да</button>
+    </div>
+
+    <script>
+        // Реализация функции goToQuiz, которая перенаправит на страницу с тестом
+        function goToQuiz() {
+            window.location.href = 'test.html'; // Перенаправляет на test.html
+        }
+    </script>
+   
+    <script>
+        function startConfetti() {
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+                document.body.appendChild(confetti);
+            }
+        }
+
+       // let foundCount = 0;
+
+        // function foundDuck(element) {
+        //     element.classList.add('found');
+        //     element.onclick = null;
+        //     foundCount++;
+        //     if (foundCount === 10) {
+        //         alert('Поздравляю! Вы нашли всех уточек!');
+        //     }
+        // }
+    </script>
+</body>
+</html>

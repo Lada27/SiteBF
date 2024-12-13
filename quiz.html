@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('img/fon2.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: black;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        h3 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        .question-container {
+            display: none;
+            background: rgba(255, 255, 255, 0.8); /* Полупрозрачный белый фон */
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Тень */
+            animation: fadeIn 1s ease-in-out;
+        }
+        .question-container.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .options li {
+            margin: 10px 0;
+        }
+        .options label {
+            display: flex;
+            align-items: center;
+        }
+        .options input {
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #FFA500; /* Оранжевый цвет */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        button:hover {
+            background-color: #FF8C00; /* Тёмно-оранжевый цвет при наведении */
+            transform: scale(1.05); /* Увеличение кнопки */
+        }
+        img.duck {
+            width: 50px;
+            height: auto;
+            margin: 5px;
+        }
+        #ducks {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="quiz-container"></div>
+    <div id="ducks"></div>
+
+    <script>
+        // Текущий JavaScript из вашего кода
+        const questions = [
+        {
+                question: "В честь кого/чего меня назвали:",
+                options: ["Машины", "Песни", "Бабушки", "героини фильма"],
+                correct: 1,
+                image: null
+            },
+            {
+                question: "Что бы я выбрала:",
+                options: ["Горы", "Море", "Дом"],
+                correct: 0,
+                image: null
+            },
+            {
+                question: "Кем я хотела стать, когда была маленькой?:",
+                options: ["пилотом", "спасателем", "врачом", "балериной"],
+                correct: 1,
+                image: null
+            },
+        {
+                question: "Ты какашка:",
+                options: [
+                    "Я злая",
+                    "Я добрая",
+                    "Признание в любви",
+                    "Претензия",
+                    "Все варианты верны"
+                ],
+                correct: 4, // Индекс правильного ответа
+                image: null // Нет изображения
+            },
+            {
+                question: "Я тебя съем:",
+                options: [
+                    "Угроза",
+                    "Флирт",
+                    "Значит, что я голодная",
+                    "фраза из колобка",
+                    "Все варианты верны"
+                ],
+                correct: 4, // Индекс правильного ответа
+                image: null // Нет изображения
+            },
+            {
+                question: "Мой рост:",
+                options: ["165", "181", "178", "169"],
+                correct: 2,
+                image: null
+            },
+            {
+                question: "Форма ногтей:",
+                options: ["овал", "квадрат", "миндаль", "круг"],
+                correct: 2,
+                image: null
+            },
+            {
+                question: "Мой вес:",
+                options: ["45", "50", "Я пушинка", "60"],
+                correct: 2,
+                image: null
+            },
+            {
+                question: "На какой части тела у меня есть родимое пятно?",
+                options: ["Лицо", "Шея", "Нога", "Рука"],
+                correct: 0,
+                image: null
+            },
+            {
+                question: "Мой знак зодиака:",
+                options: ["Козерог", "Весы", "Стрелец", "Лев"],
+                correct: 3,
+                image: null
+            },
+
+            {
+                question: "Какой цифры нет в моем номере телефона?",
+                options: ["5", "0", "3", "4"],
+                correct: 2,
+                image: null
+            },
+            {
+                question: "Сколько раз в нашем диалоге встречалось словосочетание 'иди в зад'",
+                options: ["16", "10", "21", "30"],
+                correct: 1,
+                image: null
+            },
+            {
+                question: "Сколько раз в нашем диалоге встречалось слово 'говно'",
+                options: ["19", "25", "6", "30"],
+                correct: 0,
+                image: null
+            },
+            {
+                question: "Сколько букетов ты подарил мне за этот год?",
+                options: ["13", "15", "10", "20"],
+                correct: 1,
+                image: null
+            },
+        ];
+        let currentQuestionIndex = 0;
+        let ducksCount = 0;
+
+        function loadQuiz() {
+            const quizContainer = document.getElementById("quiz-container");
+
+            questions.forEach((q, index) => {
+                const questionBlock = document.createElement("div");
+                questionBlock.classList.add("question-container");
+                if (index === 0) questionBlock.classList.add("active");
+
+                const questionTitle = document.createElement("h3");
+                questionTitle.textContent = `${index + 1}. ${q.question}`;
+                questionBlock.appendChild(questionTitle);
+
+                const optionsList = document.createElement("ul");
+                optionsList.classList.add("options");
+
+                q.options.forEach((option, i) => {
+                    const optionItem = document.createElement("li");
+                    const label = document.createElement("label");
+
+                    const input = document.createElement("input");
+                    input.type = "radio";
+                    input.name = `question-${index}`;
+                    input.value = i;
+
+                    label.appendChild(input);
+                    label.appendChild(document.createTextNode(option));
+                    optionItem.appendChild(label);
+
+                    optionsList.appendChild(optionItem);
+                });
+
+                questionBlock.appendChild(optionsList);
+
+                const nextButton = document.createElement("button");
+                nextButton.textContent = "Подтвердить";
+                nextButton.onclick = () => handleNext(index, questionBlock);
+                questionBlock.appendChild(nextButton);
+
+                quizContainer.appendChild(questionBlock);
+            });
+        }
+
+        function handleNext(index, questionBlock) {
+            const selectedOption = document.querySelector(`input[name="question-${index}"]:checked`);
+            if (!selectedOption) {
+                alert("Пожалуйста, выберите вариант ответа.");
+                return;
+            }
+
+            if (parseInt(selectedOption.value) === questions[index].correct) {
+                ducksCount++;
+                addDuck();
+                questionBlock.classList.remove("active");
+
+                if (index + 1 < questions.length) {
+                    const nextBlock = document.querySelectorAll(".question-container")[index + 1];
+                    nextBlock.classList.add("active");
+                } else {
+                    finishQuiz();
+                }
+            } else {
+                alert("Неверно! Попробуй снова.");
+            }
+        }
+
+        function addDuck() {
+            const ducksContainer = document.getElementById("ducks");
+            const duck = document.createElement("img");
+            duck.src = "img/duck.png"; // Убедитесь, что файл "duck.png" находится в том же каталоге.
+            duck.alt = "Уточка";
+            duck.classList.add("duck");
+            ducksContainer.appendChild(duck);
+        }
+
+        function finishQuiz() {
+            window.location.href = `final.html?ducks=${ducksCount}`;
+        }
+
+        window.onload = loadQuiz;
+    </script>
+</body>
+</html>
